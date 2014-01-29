@@ -1,0 +1,26 @@
+[Global]
+CurrentProject=hw1.vpj
+[ProjectDates]
+hw1.vpj=20140120191124000
+[ActiveConfig]
+hw1.vpj=Debug
+[TreeExpansion2]
+-@ hw1.vpj
+  + Source Files
+  - Other Files
+scroll:0
+[State]
+SCREEN: 1366 768 0 31 1367 716 0 0 M 0 0 0 0 1080 493 0
+CWD: ../hw1
+FILEHIST: 9
+32c.py
+32c.sh
+old.py
+32b.py
+one.out
+one.py
+yelp.py
+yelp2.py
+w.py
+TBCLASS: 0 0
+DEBUG2: 0

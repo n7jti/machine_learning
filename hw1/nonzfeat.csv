@@ -1,0 +1,26 @@
+Loading Data
+i, w, label
+13 , 2.05191424 , log(ReviewNumLineBreaks*BusinessNumReviews)
+66 , 7.13522299 , UserUsefulVotes*InScottsdale
+81 , 12.1341003 , sqrt(UserFunnyVotes*InPhoenix)
+100 , 2.3627453 , UserUsefulVotes*IsBeautyAndSpas
+114 , 6.17101835 , sq(UserUsefulVotes*InScottsdale)
+221 , 1.86225898 , log(ReviewNumLineBreaks*UserCoolVotes)
+266 , 5.01839976 , sqrt(UserFunnyVotes*BusinessNumStars)
+270 , 6.97085466 , UserFunnyVotes*IsShopping
+279 , 0.287177904 , log(IsActiveLife*BusinessNumCheckins)
+295 , 2.43416601 , ReviewNumLineBreaks*InPhoenix
+353 , 20.8812332 , sqrt(UserCoolVotes*BusinessNumStars)
+367 , 8.32928752 , sq(UserUsefulVotes*IsRestaurant)
+373 , 6.86587909 , sqrt(ReviewNumLineBreaks*UserCoolVotes)
+395 , 8.82965128 , BusinessNumReviews*InGlendale
+411 , 12.4728351 , ReviewNumWords*ReviewNumLineBreaks
+605 , 11.0716277 , log(ReviewNumCharacters*UserUsefulVotes)
+757 , 10.6178607 , ReviewInFall*InGlendale
+759 , 4.56057078 , ReviewNumCharacters*IsRestaurant
+764 , 2.41585426 , log(ReviewNumSmileys*InScottsdale)
+784 , 2.02723904 , sq(ReviewNumWords*IsNightlife)
+870 , 1.20266563 , ReviewNumLineBreaks*BusinessNumStars
+983 , 0.0149320822 , log(BusinessLongitude*BusinessLatitude)
+989 , 1.64814618 , indicator(UserAverageStars*UserUsefulVotes)
+999 , 8.38030879 , sqrt(ReviewNumCharacters*UserCoolVotes)
