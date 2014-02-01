@@ -11,6 +11,7 @@
             <F N="Perceptron3.py"/>
             <F N="percptron.py"/>
             <F N="percptron2.py"/>
+            <F N="svm.py"/>
         </Folder>
         <Folder
             Name="Other Files"
