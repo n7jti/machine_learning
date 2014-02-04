@@ -23,8 +23,8 @@ regex = "(?P<station>\d+)\s+(?P<wban>\d+)\s+" + \
         "(?P<snow_depth>\d+\.\d+)\s+" + \
         "(?P<fog>[01])(?P<rain>[01])(?P<snow>[01])(?P<hail>[01])(?P<thunder>[01])(?P<tornado>[01])$"
 
-def features ():
-  f = open('data/features.txt','w')
+def features (dest):
+  f = open(dest + '/features.txt','w')
   f.write('temp\n')
   f.write('dew_point\n')
   f.write('sea_level_pressure\n')
@@ -36,8 +36,8 @@ def features ():
   f.write('low\n')
   f.close()
 
-def labels ():
-  f = open('data/labels.txt', 'w')
+def labels (dest):
+  f = open(dest + '/labels.txt', 'w')
   f.write('fog\n')
   f.write('rain\n')
   f.write('hail\n')
@@ -62,9 +62,14 @@ def writeData (result, data):
   data.write(result.group('wind_speed'))
   data.write(",")
 
-  data.write(result.group('max_wind'))
+  # treat no max winds reported as winds zero
+  maxWind = result.group('max_wind')
+  if maxWind == '999.9':
+    maxWind = '0.0'
+  data.write(maxWind)
   data.write(",")
 
+  # treat no gust reported as zero gusts
   gust = result.group('gust')
   if gust == '999.9':
     gust = '0.0'
@@ -127,16 +132,17 @@ def parseFile (file, data, label):
     writeLabel(result,label)
         
 def main ():
-  #parser = argparse.ArgumentParser(description='Kernalized Perceptron!')
-  #parser.add_argument('-f', help='input data', default='2013')
-  #args = parser.parse_args()
+  parser = argparse.ArgumentParser(description='Parse the raw weather data into CSV files')
+  parser.add_argument('-source', help='subdirectory for the source data')
+  parser.add_argument('-dest', help='subdirectory for the destination data')
+  args = parser.parse_args()
 
-  data = open('data/data.csv','w')
-  label = open('data/labels.csv', 'w')
-  features()
-  labels()
+  data = open(args.dest + '/data.csv','w')
+  label = open(args.dest + '/labels.csv', 'w')
+  features(args.dest)
+  labels(args.dest)
 
-  mypath = 'rawdata'
+  mypath = args.source
   fileList = [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]
   fileList.sort()
 
