@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import numpy as np
+from scipy import linalg
 import argparse
 import math
 import operator
@@ -75,6 +76,37 @@ def etaSplit (y, idx, data):
   return - outsum
 
 
+def etaSplitl (w, data):
+  left, right = splitl(w, data)
+
+  if len(left) == 0 or len(right)==0:
+    return etaX(data)
+
+  pLeft = float(len(left))/len(data)
+  pRight = float(len(right))/len(data)
+
+  pLeftTrue = Px(1, left)
+  pLeftFalse = Px(-1,left)
+
+  pRightTrue = Px(1, right)
+  pRightFalse = Px(-1, right)
+
+  sum = 0
+  if pLeftTrue != 0:
+    sum += pLeftTrue * math.log(pLeftTrue,2)
+  if pLeftFalse != 0:
+    sum += pLeftFalse * math.log(pLeftFalse,2)
+  outsum = pLeft * sum
+
+  sum = 0
+  if pRightTrue != 0:
+    sum += pRightTrue * math.log(pRightTrue,2)
+  if pRightFalse != 0:
+    sum += pRightFalse * math.log(pRightFalse,2)
+  outsum += pRight * sum
+
+  return - outsum
+
 def split (y, idx, data):
   left = []
   right = []
@@ -85,6 +117,21 @@ def split (y, idx, data):
       right.append(data[i])
 
   return left, right
+
+def splitl (w, data):
+  left = []
+  right = []
+
+  x = np.array(data)[:,0:2]
+
+  for i in range(len(data)):
+    if np.sign(w.dot(x[i,:])-1) > 0:
+      left.append(data[i])
+    else:
+      right.append(data[i])
+
+  return left, right
+
 
 def pxgylte (x, val, idx, data):
   countCorrect = 0
@@ -114,32 +161,34 @@ def pxgygt (x, val, idx, data):
 def ig (y, idx, data):
   return etaX(data)-etaSplit(y,idx,data)
 
+def igl (w, data):
+  return etaX(data)-etaSplitl(w,data)
+
+def learn(data):
+  # I'm going to use linnear regression as a classifier
+  x = np.array(data)[:,0:2]
+  y = np.array(data)[:,2]
+  print "x", x
+  print "y", y
+  w = linalg.inv(x.T.dot(x)).dot(x.T.dot(y))
+  w = w / .1
+  print w
+  for line in range(x.shape[0]):
+    print np.sign(w.dot(x[line,:])-1)
+  return w
+
+
 def main ():
-  print "First Split, Slalary <= 27000 :", ig(27000,1,rawData)
-  l,r = split(27000, 1, rawData)
+  w=learn(rawData)
+  print "etaX(data)", etaX(rawData)
+  print "etaSplitl(w,data)", etaSplitl(w,rawData)
+  print "ig(w,data)", igl(w, rawData)
 
-  print "l is done, all FALSE!"
-  print "l", l
-
-  print "Second split on r, age<=32", ig(32,0,r)
-  rl, rr = split(32,0,r)
-
-  print "rl is done, all TRUE"
-  print "rl", rl
-
-  print "lots of choices for next split.  Choosing to split on salary <=44000", ig(44000,1,rr)
-  rrl, rrr = split(44000,1,rr);
-
-  print "rrl is done, all FALSE"
-  print "rrl", rrl
-  
-  print "lots of choices again for next split. Choosing to split on Age <= 52", ig(52, 0, rrr)
-  rrrl, rrrr = split(52, 0, rrr);
-  print "rrrl", rrrl
-  print "rrrr", rrrr
 
   
-  
+
+
 
 if __name__ == "__main__":
     main()
+
