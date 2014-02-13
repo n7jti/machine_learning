@@ -29,15 +29,15 @@ def adaboost_train (x, y, T):
 
       # train the stump
       (dv, err) = ds.stump_fit(f, y, weights, pplus)
-      we.append(err)
       decisionVariables.append(dv)
+      we.append(err)
 
       # score the classifiers on all features for this round
       score.append(abs(.5-we[idx]))
       # print "err", err, "score",score[idx]  
 
     # choose the one feature we'll use for this round's classifier
-    I.append(max(enumerate(score), key=operator.itemgetter(1))[0])
+    I.append(np.argmax(score))
     H.append(decisionVariables[I[t]])
     eps = we[I[t]]
     
@@ -88,7 +88,7 @@ def main ():
   (x, y) = gen(500)
 
   n = y.shape[0]
-  T = 50
+  T = 30
   A, H, I , TE = adaboost_train (x, y, T)
 
   # Plot

@@ -16,7 +16,6 @@ def adaboost_train (x, y, T):
   cf = x.shape[1]
   n = y.shape[0]
   weights = ones(n)/n
-  pplus = sum(weights * (y > 0))
 
   H = []
   A = []
@@ -24,6 +23,7 @@ def adaboost_train (x, y, T):
   TE = []
 
   for t in range(T):
+    pplus = sum(weights * (y > 0))
 
     # Let's train on all the features and find the one that works the best
     decisionVariables = []
@@ -34,16 +34,15 @@ def adaboost_train (x, y, T):
 
       # train the stump
       (dv, err) = ds.stump_fit(f, y, weights, pplus)
-      we.append(err)
+      we.append( err )
       decisionVariables.append(dv)
 
       # score the classifiers on all features for this round
-      score.append(abs(.5-we[idx]))
-      # print "err", err, "score",score[idx]  
-
+      score.append(abs(.5-err))
+     
     print "Round: ", t, str(datetime.now())
     # choose the one feature we'll use for this round's classifier
-    I.append(max(enumerate(score), key=operator.itemgetter(1))[0])
+    I.append(np.argmax(score))
     H.append(decisionVariables[I[t]])
     eps = we[I[t]]
     
@@ -80,17 +79,18 @@ def adaboost_find_t (A, H, I, x, y):
       out +=  A[i] * ds.stump_predict(x[:,I[i]], H[i])
       HE.append( (np.sign(out) * y < 0).sum() / float(n) )
 
-    idx = min(enumerate(HE), key=operator.itemgetter(1))[0]
+    idx = np.argmin(HE)
 
-    return HE, idx
+    return HE, idx + 1
 
 def main ():
   #Read text, try removing comments, headers ... See tok.py for implementation.
-  corpus = tok.fill_corpus(["alt.atheism", "comp.windows.x"])
+  #corpus = tok.fill_corpus(["alt.atheism", "comp.windows.x"])
+  corpus = tok.fill_corpus(["alt.atheism", "soc.religion.christian"])
 
   #Create training data
   ctr = reduce(list.__add__, map(lambda x: x[:600], corpus))
-  ytr = zeros(len(ctr)); ytr[:600] = -1; ytr[600:] = 1
+  ytr = zeros(len(ctr)); ytr[:600] = -1; ytr[600:] = 1  
 
   #Train a bag-of-words feature extractor.
   #You're free to play with the parameters of fe.text.TfidfVectorizer, but your answers
@@ -109,6 +109,9 @@ def main ():
   #This shouldn't take more than 20m.
   A, H, I , TE = adaboost_train(ftr, ytr, m)
 
+  for i in range(m):
+    print "T", i, "index:", I[i], "feature name:", feature_names[I[i]]
+
   # Plot
   pl.subplot(2,1,1)
   pl.xlabel('steps of adaboost')
@@ -124,7 +127,7 @@ def main ():
 
   #Create validation data
   cva = reduce(list.__add__, map(lambda x: x[600:800], corpus))
-  yva = zeros(len(cva)); ytr[:200] = -1; ytr[200:] = 1
+  yva = zeros(len(cva)); yva[:200] = -1; yva[200:] = 1
 
   #tfidf tokenizer is not trained here.
   fva = tfidf.transform(cva).tocsc()
@@ -133,6 +136,12 @@ def main ():
   HE, t = adaboost_find_t(A,H,I,fva, yva)
 
   print "t", t
+  A = A[:t]
+  H = H[:t]
+  I = I[:t]
+
+  S = np.vstack((A,H,I))
+  np.savetxt("matrix2.out", S);
 
   pl.clf()
   pl.plot(HE,'o')
@@ -143,7 +152,7 @@ def main ():
   cte = reduce(list.__add__, map(lambda x: x[800:], corpus))
   yte = zeros(len(cte)); yte[:200] = -1; yte[200:] = 1
 
-  fte = tfidf.transform(cva).tocsc()
+  fte = tfidf.transform(cte).tocsc()
 
   #<Testing code goes here>
   y_hat = adaboost_predict(A,H,I,fte,t)

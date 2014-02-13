@@ -5,7 +5,7 @@ import argparse
 import math
 import operator
 
-rawData = [[24, 40000, 1],
+rawData = np.array([[24, 40000, 1],
         [53, 52000, -1],
         [23, 25000, -1],
         [25, 77000, 1],
@@ -15,7 +15,7 @@ rawData = [[24, 40000, 1],
         [43, 44000, -1],
         [52, 27000, -1],
         [48, 65000, 1]
-       ] 
+       ])
 
 testData= [
             [ 1, 1, 1],
@@ -114,7 +114,7 @@ def pxgygt (x, val, idx, data):
 def ig (y, idx, data):
   return etaX(data)-etaSplit(y,idx,data)
 
-def main ():
+def stuff ():
   print "First Split, Slalary <= 27000 :", ig(27000,1,rawData)
   l,r = split(27000, 1, rawData)
 
@@ -137,6 +137,20 @@ def main ():
   rrrl, rrrr = split(52, 0, rrr);
   print "rrrl", rrrl
   print "rrrr", rrrr
+
+def main ():
+  stuff()
+  rawData.view('i8,i8,i8').sort(order=['f0','f1'],axis=0)
+  #print "rawData", rawData
+
+  for idx in range(rawData.shape[0]) :
+    val = rawData[idx,0]
+    print "age", val, "ig", ig(val,0,rawData)
+
+  rawData.view('i8,i8,i8').sort(order=['f1','f0'],axis=0)
+  for idx in range(rawData.shape[0]) :
+    val = rawData[idx,1]
+    print "salary", val, "ig", ig(val,1,rawData)
 
   
   
