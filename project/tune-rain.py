@@ -7,24 +7,24 @@ from sklearn.grid_search import GridSearchCV
 from sklearn.metrics import classification_report
 from sklearn.svm import SVC
 
-def loadData (subdir):
+def loadData (subdir, prefix):
   # Load a csv of floats:
-  data = np.genfromtxt(subdir + '/data.csv', delimiter=",", skip_header=0)
-  labels = np.genfromtxt(subdir + '/labels.csv', delimiter=",", skip_header=0)
+  data = np.genfromtxt(subdir + '/' + prefix + 'data.csv', delimiter=",", skip_header=0)
+  labels = np.genfromtxt(subdir + '/' + prefix + 'labels.csv', delimiter=",", skip_header=0)
   
   return data, labels 
 
 def main ():
   parser = argparse.ArgumentParser(description='Perform cross validation on the dataset')
   parser.add_argument('-source', help='subdirectory for the source data')
+  parser.add_argument('-prefix', help='prefix for file names')
   args = parser.parse_args()
 
-  # Load the dataset
-  x, y = loadData( args.source )
+  x, y = loadData( args.source, args.prefix )
 
   
   # Split the dataset in two equal parts
-  X_train, X_test, y_train, y_test = train_test_split(x, y[:,1], test_size=0.5, random_state=0)
+  X_train, X_test, y_train, y_test = train_test_split(x, y[:,0], test_size=0.5, random_state=0)
 
   param_grid = [
     {'C': [1, 10, 100, 1000], 'kernel': ['linear']},
