@@ -19,7 +19,7 @@ def main ():
       queue.popleft()
 
     if len(queue) == 5:
-      nextline = line.strip()
+      nextline = queue[0].strip()
       for indx in range(1,5):
         nextline = nextline + ',' + queue[indx].strip()
       dest.write(nextline)

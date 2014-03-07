@@ -1,0 +1,70 @@
+Benchmarks:
+
+wet
+             precision    recall  f1-score   support
+
+       -1.0       0.00      0.00      0.00      6928
+        1.0       0.51      1.00      0.68      7307
+
+avg / total       0.26      0.51      0.35     14235
+
+
+dry
+             precision    recall  f1-score   support
+
+       -1.0       0.49      1.00      0.65      6928
+        1.0       0.00      0.00      0.00      7307
+
+avg / total       0.24      0.49      0.32     14235
+
+
+Benchmarks: 0
+yesterday
+             precision    recall  f1-score   support
+
+       -1.0       0.55      0.55      0.55      6928
+        1.0       0.57      0.57      0.57      7307
+
+avg / total       0.56      0.56      0.56     14235
+
+
+Benchmarks: 1
+yesterday
+             precision    recall  f1-score   support
+
+       -1.0       0.54      0.54      0.54      6928
+        1.0       0.56      0.56      0.56      7307
+
+avg / total       0.55      0.55      0.55     14235
+
+
+Benchmarks: 2
+yesterday
+             precision    recall  f1-score   support
+
+       -1.0       0.53      0.53      0.53      6928
+        1.0       0.56      0.56      0.56      7307
+
+avg / total       0.54      0.54      0.54     14235
+
+
+Benchmarks: 3
+yesterday
+             precision    recall  f1-score   support
+
+       -1.0       0.53      0.53      0.53      6929
+        1.0       0.55      0.55      0.55      7306
+
+avg / total       0.54      0.54      0.54     14235
+
+
+Benchmarks: 4
+yesterday
+             precision    recall  f1-score   support
+
+       -1.0       0.53      0.53      0.53      6928
+        1.0       0.55      0.55      0.55      7307
+
+avg / total       0.54      0.54      0.54     14235
+
+

@@ -1,0 +1,6 @@
+fog
+rain
+hail
+snow
+thunder
+tornadn

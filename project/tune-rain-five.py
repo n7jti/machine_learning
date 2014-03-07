@@ -25,21 +25,23 @@ def main ():
 
   
   # Split the dataset in two equal parts
-  X_train, X_test, y_train, y_test = train_test_split(x, y[:,int(args.index)], test_size=0.2, random_state=0)
+  X_train, X_test, y_train, y_test = train_test_split(x, y[:,int(args.index)], test_size=0.5, random_state=0)
 
 
   # Set the parameters by cross-validation
+  #for i in range(21): C.append(10.0**(i-5))
+  #for i in range(17): gamma.append(10**(i-14))
 
-  C=[]
-  gamma=[]
+  #C=[0.001,0.01,0,1,1,10,100,1000,10000,100000]
+  #gamma=[1.0e-7,1.0e-6,1.0e-5,1.0e-4,0.001,0.01,0.1,1,10,100]
 
-  for i in range(21): C.append(10.0**(i-5))
-  for i in range(17): gamma.append(10**(i-14))
+  C=[10000,100000,1000000]
+  gamma=[1.0e-4,1.0e-5,1.0e-6,1e-7]
 
-  tuned_parameters = [{'kernel': ['rbf'], 'gamma': gamma, 'C': C}, {'kernel': ['linear'], 'C': C}]
+  tuned_parameters = [{'kernel': ['rbf'], 'gamma': gamma, 'C': C}]
 
   print("# Tuning hyper-parameters for accuracy")
-  clf = GridSearchCV(svm.SVC(), tuned_parameters, cv=5, scoring='accuracy')
+  clf = GridSearchCV(SVC(), tuned_parameters, cv=5, scoring='accuracy')
   clf.fit(X_train, y_train)
 
   print "Best parameters set found on development set:"
