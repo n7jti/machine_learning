@@ -1,0 +1,35 @@
+[alanl@f19 ~/Documents/machine_learning/project]$ ./t3.py
+# Tuning hyper-parameters for accuracy
+Best parameters set found on development set:
+
+SVC(C=100000, cache_size=200, class_weight=None, coef0=0.0, degree=3,
+  gamma=1e-07, kernel=rbf, max_iter=-1, probability=False,
+  random_state=None, shrinking=True, tol=0.001, verbose=False)
+
+Grid scores on development set:
+
+0.626 (+/-0.007) for {'kernel': 'rbf', 'C': 100000, 'gamma': 1e-06}
+0.631 (+/-0.007) for {'kernel': 'rbf', 'C': 100000, 'gamma': 1e-07}
+0.629 (+/-0.005) for {'kernel': 'rbf', 'C': 100000, 'gamma': 1e-08}
+0.602 (+/-0.004) for {'kernel': 'rbf', 'C': 1000000, 'gamma': 1e-06}
+0.630 (+/-0.006) for {'kernel': 'rbf', 'C': 1000000, 'gamma': 1e-07}
+0.626 (+/-0.005) for {'kernel': 'rbf', 'C': 1000000, 'gamma': 1e-08}
+0.592 (+/-0.003) for {'kernel': 'rbf', 'C': 10000000, 'gamma': 1e-06}
+0.622 (+/-0.006) for {'kernel': 'rbf', 'C': 10000000, 'gamma': 1e-07}
+0.620 (+/-0.006) for {'kernel': 'rbf', 'C': 10000000, 'gamma': 1e-08}
+
+Detailed classification report:
+
+The model is trained on the full development set.
+The scores are computed on the full evaluation set.
+
+             precision    recall  f1-score   support
+
+       -1.0       0.67      0.50      0.57      3477
+        1.0       0.62      0.76      0.68      3641
+
+avg / total       0.64      0.63      0.63      7118
+
+
+[alanl@f19 ~/Documents/machine_learning/project]$ 
+

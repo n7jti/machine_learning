@@ -1,39 +1,61 @@
 #!/usr/bin/python
+
+import argparse
 from scipy import *
 import numpy as np
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import classification_report
-from sklearn.multiclass import OneVsRestClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.grid_search import GridSearchCV
 
-def load ():
-      # Load a csv of floats:
-      train = np.genfromtxt("data/train.csv", delimiter=",", skip_header=1)
-      y_train = train[:,0]
-      x_train = train[:,1:]
 
-      test = np.genfromtxt("data/test.csv", delimiter=",", skip_header=1)
-      x_test = test
-      
-      return y_train,x_train, x_test
+def loadData (subdir, prefix):
+  # Load a csv of floats:
+  data = np.genfromtxt(subdir + '/' + prefix + 'data.csv', delimiter=",", skip_header=0)
+  labels = np.genfromtxt(subdir + '/' + prefix + 'labels.csv', delimiter=",", skip_header=0)
+  
+  return data, labels 
+
+
 def main ():
-    y, x, x_test = load();
+    parser = argparse.ArgumentParser(description='Perform cross validation on the dataset')
+    parser.add_argument('-source', help='subdirectory for the source data', default='train2')
+    parser.add_argument('-prefix', help='prefix for file names', default='five')
+    parser.add_argument('-index' , help='index of the day to train for', default='0')
+    args = parser.parse_args()
 
-    n_samples = x.shape[0]
-    n_features = x.shape[1]
-    n_classes = 10
+    x, y = loadData( args.source, args.prefix )
 
-    print("Total dataset size:")
-    print("n_samples: %d" % n_samples)
-    print("n_features: %d" % n_features)
-    print("n_classes: %d" % n_classes)
 
-    # split into a training and testing set
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+    # Split the dataset in two equal parts
+    X_train, X_test, y_train, y_test = train_test_split(x, y[:,int(args.index)], test_size=0.5, random_state=0)
 
-    clf = AdaBoostClassifier(n_estimators=100)
-    clf.fit(x_train, y_train)
+
+    tuned_parameters = [{'n_estimators': [20,40,80,100,200,400]}]
+
+    print("# Tuning hyper-parameters for accuracy")
+    clf = GridSearchCV(AdaBoostClassifier(), tuned_parameters, cv=5, scoring='accuracy')
+    clf.fit(X_train, y_train)
+
+    print "Best parameters set found on development set:"
+    print
+    print clf.best_estimator_
+    print
+    print "Grid scores on development set:"
+    print
+    for params, mean_score, scores in clf.grid_scores_:
+        print("%0.3f (+/-%0.03f) for %r" % (mean_score, scores.std() / 2, params))
+    print
+
+    print "Detailed classification report:"
+    print
+    print "The model is trained on the full development set."
+    print "The scores are computed on the full evaluation set."
+    print
+
+    y_true, y_pred = y_test, clf.predict(X_test)
+    print classification_report(y_true, y_pred)
+    print
     
-          
-
 if __name__ == "__main__":
     main()
